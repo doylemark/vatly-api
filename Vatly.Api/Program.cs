@@ -16,8 +16,6 @@ builder.Services.AddDbContext<ApplicationDbContext>((sp, opt) =>
     {
         acts.EnableRetryOnFailure(3, TimeSpan.FromSeconds((3)), null!);
     });
-    // opt.UseInternalServiceProvider(sp);
-    
 });
 
 var app = builder.Build();
