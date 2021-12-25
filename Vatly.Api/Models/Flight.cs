@@ -16,5 +16,17 @@ public class Flight
     
     public int Heading { get; set; }
     
-    public Plan? Plan { get; set; }
+    public string? OriginIcao { get; set; }
+    
+    public string? DestinationIcao { get; set; }
+    
+    public string? Route { get; set; }
+    
+    public string? AircraftType { get; set; }
+    
+    public double? PlannedAltitude { get; set; }
+    
+    public string? Alternate { get; set; }
+    
+    public int? CruiseSpeed { get; set; }
 }
