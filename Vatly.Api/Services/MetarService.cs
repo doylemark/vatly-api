@@ -5,7 +5,6 @@ using System.IO.Compression;
 using AutoMapper;
 using CsvHelper;
 
-
 namespace Vatly.Api.Services;
 
 public class MetarService
@@ -26,12 +25,13 @@ public class MetarService
         this.mapper = mapper;
     }
 
-    public void UpdateMetars()
+    public async void UpdateMetars()
     {
+        var newMetars = await FetchMetars();
         
     }
 
-    public async Task<List<Metar>> FetchMetars()
+    private async Task<List<Metar>> FetchMetars()
     {
         var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Get,

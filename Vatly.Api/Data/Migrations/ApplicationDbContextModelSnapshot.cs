@@ -71,7 +71,7 @@ namespace Vatly.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Flights");
+                    b.ToTable("Flights", (string)null);
                 });
 #pragma warning restore 612, 618
         }

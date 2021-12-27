@@ -1,14 +1,15 @@
-using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Vatly.Api.Models;
 
 public class Metar
 {
-    [JsonIgnore]
     public Guid Id { get; set; }
 
+    [Required]
     public string RawText { get; set; } = null!;
 
+    [Required]
     public string Icao { get; set; } = null!;
     
     public DateTime Date { get; set; }
