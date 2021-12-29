@@ -11,21 +11,22 @@ public class SampleController : ControllerBase
 {
   private readonly ApplicationDbContext dbContext;
   private readonly MetarService metarService;
+  private readonly JobsService jobsService;
 
-  public SampleController(ApplicationDbContext dbContext, MetarService metarService)
+  public SampleController(ApplicationDbContext dbContext, MetarService metarService, JobsService jobsService)
   {
     this.dbContext = dbContext;
     this.metarService = metarService;
+    this.jobsService = jobsService;
   }
-
+  
   [HttpGet]
-  [Route("")]
+  [Route("", Name = "GetMetar")]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status404NotFound)]
-  public async Task<IEnumerable<Metar>> GetSample()
+  public string GetSample()
   {
-    var metars = await metarService.FetchMetars();
-
-    return metars.Take(5);
+    jobsService.StartJobs();
+    return "hello";
   }
 }

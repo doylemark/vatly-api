@@ -4,6 +4,7 @@ using Vatly.Api.Models;
 using System.IO.Compression;
 using AutoMapper;
 using CsvHelper;
+using Microsoft.EntityFrameworkCore;
 
 namespace Vatly.Api.Services;
 
@@ -25,10 +26,65 @@ public class MetarService
         this.mapper = mapper;
     }
 
-    public async void UpdateMetars()
+    /// <summary>
+    /// 1. Fetch all new metars and check if they exist in the DB.
+    ///      if a metar exists and new metar is more recent: update
+    ///      if not: add it
+    /// 2. Select all metars older than an hour and delete them all
+    /// 3. Print what operations have occured
+    /// </summary>
+    public async Task UpdateMetars()
     {
+        var currentMetars = await dbContext.Metars.ToListAsync();
         var newMetars = await FetchMetars();
+        int metarsAdded = 0;
+        int metarsRemoved = 0;
+        int noChange = 0;
+
+        foreach (var metar in newMetars.Take(3))
+        {
+            var existingMetar = currentMetars.Find(m => m.Icao == metar.Icao);
+
+            if (existingMetar == null)
+            {
+                await dbContext.Metars.AddAsync(metar);
+                metarsAdded++;
+            }
+            else if (DateTime.Compare(metar.Date, existingMetar.Date) > 0)
+            {
+                dbContext.Remove(existingMetar);
+                dbContext.Metars.Add(metar);
+                metarsAdded++;
+                metarsRemoved++;
+            }
+            else
+            {
+                noChange++;
+            }
+            
+            await dbContext.SaveChangesAsync();
+        }
+
+        Console.WriteLine($"Wrote {metarsAdded} new metars, removed {metarsRemoved}, {noChange} were unchanged");
+    }
+
+    public async Task RemoveExpiredMetars()
+    {
+        var currentMetars = await dbContext.Metars.ToListAsync();
+
+        int removed = 0;
+        var maxAge = DateTime.UtcNow.AddHours(-1);
         
+        foreach (var metar in currentMetars) 
+        {
+            if (DateTime.Compare(maxAge, metar.Date) > 1)
+            {
+                dbContext.Remove(metar);
+                removed++;
+            }
+        }
+
+        Console.WriteLine($"Removed {removed}, left ${currentMetars.Count}");
     }
 
     private async Task<List<Metar>> FetchMetars()
@@ -47,7 +103,7 @@ public class MetarService
         var parser = new CsvParser(csvStream, CultureInfo.InvariantCulture);
 
         var metars = new List<Metar>();
-        
+
         while (await parser.ReadAsync())
         {
             var parts = parser.Record;
@@ -79,7 +135,7 @@ public class MetarService
         {
             Id = new Guid(),
             RawText = parts[0].Trim(),
-            Icao = parts[1],
+            Icao = parts[1].ToUpper(),
             Date = date,
             Temperature = temperature,
             DewPoint = dewPoint,

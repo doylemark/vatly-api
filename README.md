@@ -1,6 +1,6 @@
 # Vatly API
 
-###Run migrations
+### Run migrations
 `dotnet ef database update --project Vatly.Api`
 
 ### Make new migration

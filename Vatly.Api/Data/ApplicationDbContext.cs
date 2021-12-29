@@ -10,4 +10,6 @@ public class ApplicationDbContext : DbContext {
     }
 
     public DbSet<Flight> Flights { get; set; } = null!;
+    public DbSet<Metar> Metars { get; set; } = null!;
+    public DbSet<Airport> Airports { get; set; } = null!;
 }

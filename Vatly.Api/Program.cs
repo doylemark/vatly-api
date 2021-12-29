@@ -48,7 +48,9 @@ builder.Services.AddCors(opt =>
 });
 
 builder.Services.AddScoped<MetarService>();
-builder.Services.AddTransient<JobsService>();
+builder.Services.AddScoped<JobsService>();
+builder.Services.AddScoped<ApplicationDbSeeder>();
+
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -61,21 +63,23 @@ app.UseSwaggerUI(opt =>
     opt.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     opt.RoutePrefix = string.Empty;
 });
-app.UseHangfireDashboard("/jobs");
-
 app.UseCors();
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
+app.UseHangfireDashboard("/jobs");
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     var jobs = services.GetService<JobsService>();
     jobs?.StartJobs();
+
+    var seeder = services.GetService<ApplicationDbSeeder>();
+    if (seeder != null)
+        await seeder.SeedDb();
 }
 
 app.Run();

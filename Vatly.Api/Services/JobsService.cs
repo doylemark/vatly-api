@@ -11,10 +11,12 @@ public class JobsService
         this.metarService = metarService;
     }
 
-
     public void StartJobs()
     {
         Console.Write("Started Recurring Jobs");
-        RecurringJob.AddOrUpdate("updateMetars", () => metarService.UpdateMetars(), Cron.Minutely);
+
+        // Every 10 minutes
+        RecurringJob.AddOrUpdate("updateMetars", () => metarService.UpdateMetars(), "*/10 * * * *");
+        RecurringJob.AddOrUpdate("expireMetars", () => metarService.RemoveExpiredMetars(), Cron.Hourly);
     }
 }
