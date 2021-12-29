@@ -49,6 +49,7 @@ builder.Services.AddCors(opt =>
 
 builder.Services.AddScoped<MetarService>();
 builder.Services.AddScoped<JobsService>();
+builder.Services.AddScoped<VatsimService>();
 builder.Services.AddScoped<ApplicationDbSeeder>();
 
 
@@ -77,9 +78,12 @@ using (var scope = app.Services.CreateScope())
     var jobs = services.GetService<JobsService>();
     jobs?.StartJobs();
 
-    var seeder = services.GetService<ApplicationDbSeeder>();
-    if (seeder != null)
-        await seeder.SeedDb();
+    if (app.Environment.IsDevelopment())
+    {
+        var seeder = services.GetService<ApplicationDbSeeder>();
+        if (seeder != null)
+            await seeder.SeedDb();
+    }
 }
 
 app.Run();

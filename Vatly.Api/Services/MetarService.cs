@@ -2,7 +2,6 @@ using System.Globalization;
 using Vatly.Api.Data;
 using Vatly.Api.Models;
 using System.IO.Compression;
-using AutoMapper;
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,16 +13,13 @@ public class MetarService
 
     private readonly ApplicationDbContext dbContext;
     private readonly IHttpClientFactory httpClientFactory;
-    private readonly IMapper mapper;
 
     public MetarService(
         ApplicationDbContext dbContext, 
-        IHttpClientFactory httpClientFactory,
-        IMapper mapper)
+        IHttpClientFactory httpClientFactory)
     {
         this.dbContext = dbContext;
         this.httpClientFactory = httpClientFactory;
-        this.mapper = mapper;
     }
 
     /// <summary>
