@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Vatly.Api.Data;
@@ -11,9 +12,10 @@ using Vatly.Api.Data;
 namespace Vatly.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211229072900_AddPlans")]
+    partial class AddPlans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,10 +138,6 @@ namespace Vatly.Api.Migrations
                     b.Property<double>("Latitude")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("LogonTime")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<double>("Longitude")
                         .HasColumnType("double precision");
 
@@ -167,45 +165,56 @@ namespace Vatly.Api.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Aircraft")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Altitude")
-                        .HasColumnType("text");
+                    b.Property<double>("Altitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid?>("ArrivalId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("DepartureTime")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Destination")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("EnrouteTime")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("FlightId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FuelTime")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Origin")
-                        .HasColumnType("text");
+                    b.Property<Guid?>("OriginId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Remarks")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Route")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Rules")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Speed")
-                        .HasColumnType("text");
+                    b.Property<double>("Speed")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ArrivalId");
+
                     b.HasIndex("FlightId")
                         .IsUnique();
+
+                    b.HasIndex("OriginId");
 
                     b.ToTable("FlightPlans");
                 });
@@ -255,11 +264,23 @@ namespace Vatly.Api.Migrations
 
             modelBuilder.Entity("Vatly.Api.Models.FlightPlan", b =>
                 {
+                    b.HasOne("Vatly.Api.Models.Airport", "Arrival")
+                        .WithMany()
+                        .HasForeignKey("ArrivalId");
+
                     b.HasOne("Vatly.Api.Models.Flight", null)
                         .WithOne("FlightPlan")
                         .HasForeignKey("Vatly.Api.Models.FlightPlan", "FlightId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Vatly.Api.Models.Airport", "Origin")
+                        .WithMany()
+                        .HasForeignKey("OriginId");
+
+                    b.Navigation("Arrival");
+
+                    b.Navigation("Origin");
                 });
 
             modelBuilder.Entity("Vatly.Api.Models.Flight", b =>

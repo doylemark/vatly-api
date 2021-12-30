@@ -5,26 +5,26 @@ public class FlightPlan
     public Guid Id { get; set; }
     
     public Guid FlightId { get; set; }
-
-    public string Rules { get; set; } = null!;
-
-    public string Aircraft { get; set; } = null!;
     
-    public Airport? Origin { get; set; }
-    
-    public Airport? Arrival { get; set; }
+    public string? Rules { get; set; }
 
-    public double Speed { get; set; } 
-    
-    public double Altitude { get; set; }
+    public string? Aircraft { get; set; }
 
-    public string DepartureTime { get; set; } = null!;
+    public string? Origin { get; set; }
 
-    public string EnrouteTime { get; set; } = null!;
+    public string? Destination { get; set; }
 
-    public string FuelTime { get; set; } = null!;
+    public string? Speed { get; set; }
 
-    public string Remarks { get; set; } = null!;
+    public string? Altitude { get; set; }
 
-    public string Route { get; set; } = null!;
+    public string? DepartureTime { get; set; }
+
+    public string? EnrouteTime { get; set; }
+
+    public string? FuelTime { get; set; }
+
+    public string? Remarks { get; set; }
+
+    public string? Route { get; set; }
 }

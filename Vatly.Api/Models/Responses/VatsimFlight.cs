@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Vatly.Api.Models;
+namespace Vatly.Api.Models.Responses;
 
 [JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
-public class Flight
+public class VatsimFlight
 {
     public Guid Id { get; set; }
     
@@ -32,8 +32,7 @@ public class Flight
     
     public int Heading { get; set; }
 
-    public FlightPlan? FlightPlan { get; set; }
+    public VatsimFlightPlan? FlightPlan { get; set; }
 
-    [Required]
-    public string LogonTime { get; set; } = null!;
+    [Required] public string LogonTime { get; set; } = null!;
 }

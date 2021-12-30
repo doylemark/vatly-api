@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Vatly.Api.Data;
@@ -11,9 +12,10 @@ using Vatly.Api.Data;
 namespace Vatly.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211229213529_AddLogonTime")]
+    partial class AddLogonTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,10 +174,10 @@ namespace Vatly.Api.Migrations
                     b.Property<string>("Altitude")
                         .HasColumnType("text");
 
-                    b.Property<string>("DepartureTime")
+                    b.Property<string>("Arrival")
                         .HasColumnType("text");
 
-                    b.Property<string>("Destination")
+                    b.Property<string>("DepartureTime")
                         .HasColumnType("text");
 
                     b.Property<string>("EnrouteTime")

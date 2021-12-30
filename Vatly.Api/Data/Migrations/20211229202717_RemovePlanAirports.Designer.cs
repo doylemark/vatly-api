@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Vatly.Api.Data;
@@ -11,9 +12,10 @@ using Vatly.Api.Data;
 namespace Vatly.Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211229202717_RemovePlanAirports")]
+    partial class RemovePlanAirports
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,10 +138,6 @@ namespace Vatly.Api.Migrations
                     b.Property<double>("Latitude")
                         .HasColumnType("double precision");
 
-                    b.Property<string>("LogonTime")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<double>("Longitude")
                         .HasColumnType("double precision");
 
@@ -167,40 +165,49 @@ namespace Vatly.Api.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Aircraft")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Altitude")
+                    b.Property<double>("Altitude")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Arrival")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("DepartureTime")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Destination")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("EnrouteTime")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("FlightId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FuelTime")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Origin")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Remarks")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Route")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Rules")
+                        .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Speed")
-                        .HasColumnType("text");
+                    b.Property<double>("Speed")
+                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
